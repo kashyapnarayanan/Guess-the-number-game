@@ -3,57 +3,67 @@
 let secretNumber = Math.floor(Math.random() * 20 + 1);
 let score = 20;
 let highScore = 0;
+
+const displayMessage = function (message) {
+  document.querySelector('.message').textContent = message;
+};
+
+const displayScore = function (score) {
+  document.querySelector('.score').textContent = score;
+};
+
+const displaySecretNumber = function (secretNumber) {
+  document.querySelector('.number').textContent = secretNumber;
+};
+const setBackground = function (color) {
+  document.querySelector('body').style.backgroundColor = color;
+};
+const setGuessWidth = function (width) {
+  document.querySelector('.number').style.width = width;
+};
+
 document.querySelector('.check').addEventListener('click', function () {
   const guess = Number(document.querySelector('.guess').value);
   // console.log(typeof guess);
-  
+
   //when there is no input
+
   if (!guess) {
-    document.querySelector('.message').textContent = '😕 No Number';
+    displayMessage('😕 No Number');
   }
   //when enter invalid number
   else if (guess < 0 || guess > 20) {
-    document.querySelector('body').style.backgroundColor = '#cc3300';
-    document.querySelector('.message').textContent =
-      '❌ Enter a Value Between 1 and 20';
+    setBackground('#cc3300');
+    displayMessage('❌ Enter a Value Between 1 and 20');
   }
   //when enter valid number
   else if (guess <= 20) {
     if (guess === secretNumber) {
-      document.querySelector('.number').textContent = secretNumber;
-      document.querySelector('.number').style.width = '30rem';
-      document.querySelector('body').style.backgroundColor = '#60b347';
-      document.querySelector('.message').textContent = '😍 Correct Number';
-      document.querySelector('.score').textContent = score;
+      setGuessWidth('30rem');
+      displaySecretNumber(secretNumber);
+      setBackground('#60b347');
+      displayMessage('😍 Correct Number');
+      displayScore(score);
       if (score > highScore) {
         highScore = score;
         document.querySelector('.highscore').textContent = highScore;
       }
-
+      //Less code
       //When user enter low value
-    } else if (guess < secretNumber) {
-      if (score > 0) {
-        document.querySelector('body').style.backgroundColor = '#b38600';
-        document.querySelector('.message').textContent = '📉 Too Low';
-        score--;
-        document.querySelector('.score').textContent = score;
-      } else {
-        document.querySelector('body').style.backgroundColor = '#cc3300';
-        document.querySelector('.message').textContent =
-          'You exceeded the maximum attempts';
-      }
+    } else if (guess !== secretNumber) {
+      if (score > 1) {
+        const backgroundColor = guess < secretNumber ? '#b38600' : '#800060';
+        setBackground(backgroundColor);
 
-      //When user enter high value
-    } else if (guess > secretNumber) {
-      if (score > 0) {
-        document.querySelector('body').style.backgroundColor = '#800060';
-        document.querySelector('.message').textContent = '📈 Too High';
+        const message = guess < secretNumber ? '📉 Too Low' : '📈 Too High';
+        displayMessage(message);
+
         score--;
-        document.querySelector('.score').textContent = score;
+        displayScore(score);
       } else {
-        document.querySelector('body').style.backgroundColor = '#cc3300';
-        document.querySelector('.message').textContent =
-          'You exceeded the maximum attempts';
+        setBackground('#cc3300');
+        displayMessage('You lost the game');
+        displayScore(0);
       }
     }
   }
@@ -62,10 +72,10 @@ document.querySelector('.check').addEventListener('click', function () {
 document.querySelector('.again').addEventListener('click', function () {
   secretNumber = Math.floor(Math.random() * 20 + 1);
   score = 20;
-  document.querySelector('body').style.backgroundColor = '#222';
-  document.querySelector('.number').style.width = '15rem';
-  document.querySelector('.message').textContent = 'Start guessing...';
-  document.querySelector('.score').textContent = score;
-  document.querySelector('.number').textContent = '?';
+  setBackground('#222');
+  setGuessWidth('15rem');
+  displayMessage('Start guessing...');
+  displayScore(score);
+  displaySecretNumber('?');
   document.querySelector('.guess').value = '';
 });
