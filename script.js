@@ -4,6 +4,9 @@ let secretNumber = Math.floor(Math.random() * 20 + 1);
 let score = 20;
 let highScore = 0;
 document.querySelector('.check').addEventListener('click', function () {
+  const guess = Number(document.querySelector('.guess').value);
+  // console.log(typeof guess);
+  
   //when there is no input
   if (!guess) {
     document.querySelector('.message').textContent = '😕 No Number';
